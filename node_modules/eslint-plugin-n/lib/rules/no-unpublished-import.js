@@ -11,7 +11,19 @@ const getResolvePaths = require("../util/get-resolve-paths")
 const getResolverConfig = require("../util/get-resolver-config")
 const visitImport = require("../util/visit-import")
 
-/** @type {import('eslint').Rule.RuleModule} */
+/**
+ * @typedef {[
+ *   {
+ *     allowModules?: import('../util/get-allow-modules').AllowModules;
+ *     convertPath?: import('../util/get-convert-path').ConvertPath;
+ *     resolvePaths?: import('../util/get-resolve-paths').ResolvePaths;
+ *     resolverConfig?: import('../util/get-resolver-config').ResolverConfig;
+ *     ignoreTypeImport?: boolean;
+ *     ignorePrivate?: boolean;
+ *   }?
+ * ]} RuleOptions
+ */
+/** @type {import('./rule-module').RuleModule<{RuleOptions: RuleOptions}>} */
 module.exports = {
     meta: {
         docs: {

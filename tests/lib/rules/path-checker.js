@@ -1,15 +1,15 @@
 /**
  * @fileoverview feature sliced relative path checker
- * @author aleksei
+ * @author alex
  */
-"use strict";
+'use strict';
 
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const rule = require("../../../lib/rules/path-checker"),
-  RuleTester = require("eslint").RuleTester;
+const rule = require('../../../lib/rules/path-checker'),
+    RuleTester = require('eslint').RuleTester;
 
 
 //------------------------------------------------------------------------------
@@ -17,34 +17,37 @@ const rule = require("../../../lib/rules/path-checker"),
 //------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({
-  // parserOptions: { ecmaVersion: 6, sourceType: "module" } - без этого работает, с этим нет
-});
-
-ruleTester.run("path-checker", rule, {
-  valid: [
-    // give me some code that won't trigger a warning
-    {
-      filename: "C:\\Users\\Alexey\\Desktop\\project\\src\\entities\\Article\\model\\types\\article.ts",
-      code: "import { Article } from '../../model/types/article.ts'",
-      errors: [],
-    },
-  ],
-
-  invalid: [
-    {
-      filename: "C:\\Users\\Alexey\\Desktop\\project\\src\\entities\\Article\\model\\types\\article.ts",
-      code: "import { Article } from '@/entities/Article'",
-      errors: [{ message: "all paths must be relative inside the same slice", }],
-      options: [
-        {
-          alias: '@'
+    languageOptions: {
+        parserOptions: {
+            ecmaVersion: 6,
+            sourceType: 'module',
         }
-      ],
-    },
-    {
-      filename: "C:\\Users\\Alexey\\Desktop\\project\\src\\entities\\Article\\model\\types\\article.ts",
-      code: "import { Article } from 'entities/Article'",
-      errors: [{ message: "all paths must be relative inside the same slice", }],
-    },
-  ],
+    }
+});
+ruleTester.run('path-checker', rule, {
+    valid: [
+        {
+            filename: 'C:\\Users\\alex\\Desktop\\javascript\\production_project\\src\\entities\\Article',
+            code: 'import { addCommentFormActions, addCommentFormReducer } from \'../../model/slices/addCommentFormSlice\'',
+            errors: [],
+        },
+    ],
+
+    invalid: [
+        {
+            filename: 'C:\\Users\\alex\\Desktop\\javascript\\production_project\\src\\entities\\Article',
+            code: 'import { addCommentFormActions, addCommentFormReducer } from \'@/entities/Article/model/slices/addCommentFormSlice\'',
+            errors: [{ message: 'В рамках одного слайса все пути должны быть относительными' }],
+            options: [
+                {
+                    alias: '@'
+                }
+            ]
+        },
+        {
+            filename: 'C:\\Users\\alex\\Desktop\\javascript\\production_project\\src\\entities\\Article',
+            code: 'import { addCommentFormActions, addCommentFormReducer } from \'entities/Article/model/slices/addCommentFormSlice\'',
+            errors: [{ message: 'В рамках одного слайса все пути должны быть относительными' }],
+        },
+    ],
 });
